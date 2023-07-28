@@ -7,7 +7,6 @@ const jwt = require("jsonwebtoken");
 router.post('/', async (req, res) => {
   const { email, firstName, lastName, password } = req.body;
 
-  const secret = process.env.secret;
 
   try {
     const userExists = await User.findOne({ email });
@@ -22,7 +21,7 @@ router.post('/', async (req, res) => {
       return;
     }
 
-    const passwordHash = await bcrypt.hash(password, 10);
+    const passwordHash = await bycrypt.hash(password, 10);
 
     const user = await User.create({
       email,
@@ -45,6 +44,7 @@ router.post('/', async (req, res) => {
 });
 
 function createToken(user) {
+  const secret = process.env.secret;
   const { id, firstName, lastName, email } = user;
   const token = jwt.sign(
     {
